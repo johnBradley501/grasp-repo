@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.actionSets">
+    <actionSet
+            id="uk.ac.kcl.cch.jb.sparql.actionSets"
+            label="SPARQL Builder"
+            visible="true">
+         <action
+               class="uk.ac.kcl.cch.jb.sparql.actions.OpenServersViewAction"
+               icon="icons/rdf-server-16.gif"
+               id="uk.ac.kcl.cch.jb.sparql.openServersView"
+               label="Open Servers View"
+               style="radio"
+               toolbarPath="Normal"
+               tooltip="Open SPARQL Builder&apos;s Server List View">
+         </action>
+         <action
+               class="uk.ac.kcl.cch.jb.sparql.actions.CreateNewFileAction"
+               icon="icons/sw-16-8.png"
+               id="uk.ac.kcl.cch.jb.sparql.newSPARQLfile"
+               label="Create new SPARQL File"
+               style="push"
+               toolbarPath="Normal"
+               tooltip="Create new SPARQL File">
+         </action>
+      </actionSet>
+   </extension>
+
+</plugin>

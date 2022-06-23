@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: SPARQL Query Editor: Workbench components
+Bundle-SymbolicName: uk.ac.kcl.cch.jb.sparql.wkb;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: John Bradley
+Automatic-Module-Name: uk.ac.kcl.cch.jb.sparql.wkb
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Require-Bundle: org.eclipse.ui,
+ uk.ac.kcl.cch.jb.sparql;bundle-version="1.0.0"

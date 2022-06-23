@@ -1,0 +1,158 @@
+https://www.tutorialspoint.com/apache_httpclient/index.htm
+
+prefix vocab: <https://www.poms.ac.uk/rdf/ontology#>
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+select ?name ?uri
+where {
+   ?uri a vocab:Role.
+   OPTIONAL {?uri rdfs:label ?name}
+FILTER regex(?name, "\\bParty", "i")
+} order by ?name
+
+SPARQL builder:
+https://rdf4j.org/documentation/tutorials/sparqlbuilder/
+https://stackoverflow.com/questions/66967498/constructing-a-sparql-query-using-rdf4j
+https://stackoverflow.com/questions/67588129/how-to-construct-long-queries-using-rdf4j
+
+filter
+https://en.wikibooks.org/wiki/SPARQL/FILTER
+https://www.w3.org/TR/sparql11-query/ (for functions, see near end entry 121: BuiltInCall
+
+public GraphPatternNotTriples filter(Expression<?> constraint)
+
+Like GraphPattern.filter(Expression), but mutates and returns this instance
+
+https://rdf4j.org/javadoc/3.2.0/org/eclipse/rdf4j/sparqlbuilder/graphpattern/GraphPattern.html
+
+
+org.eclipse.rdf4j.sparqlbuilder.constraint
+Class Expressions
+
+
+maven and plugins
+https://www.vogella.com/tutorials/EclipseTycho/article.html
+https://stackoverflow.com/questions/6830399/how-to-build-an-eclipse-plugin-with-maven
+
+graph transversal
+https://teachallaboutit.school/traversing-a-graph/
+https://tildesites.bowdoin.edu/~ltoma/teaching/cs231/spring16/Lectures/10-bfsdfs/bfsdfs.pdf
+
+Predefined Namespace Prefixes
+https://www.orpha.net/sparql?nsdecl
+
+semantic web icons
+https://www.w3.org/2007/10/sw-logos.html
+
+Visual Query Builder
+https://leipert.github.io/vsb/
+
+Class RdfPredicateObjectList
+Rdf.predicateObjectList(RdfPredicate predicate, RdfObject... objects)
+
+Launching external browser:
+http://books.gigatux.nl/mirror/eclipseplugins/032142672X/ch20lev1sec4.html
+--------------------------------
+
+20.4.1. IWorkbenchBrowserSupport
+
+To use IWorkbenchBrowserSupport in the FavoritesView, modify the addWebButtonToToolBar() method to construct the URL and then open a browser inside the Eclipse workbench window showing the QualityEclipse Web site. To launch an external browser rather than an embedded browser, change the first argument of the createBrowser() call to IWorkbenchBrowserSupport.AS_EDITOR.
+
+private void addWebButtonToToolBar() {
+   Action webAction = new Action() {
+      public void run() {
+         IWorkbenchBrowserSupport browserSupport = getSite()
+               .getWorkbenchWindow().getWorkbench()
+               .getBrowserSupport();
+
+         URL webUrl;
+         try {
+            webUrl = new URL("http://www.qualityeclipse.com");
+         }
+         catch (MalformedURLException e) {
+            FavoritesLog.logError(e);
+            return;
+         }
+
+         IWebBrowser browser;
+         try {
+            browser = browserSupport.createBrowser(
+                  IWorkbenchBrowserSupport.AS_EDITOR, null,
+                  "Quality Eclipse", "The Quality Eclipse website");
+            browser.openURL(webUrl);
+         }
+         catch (PartInitException e) {
+            FavoritesLog.logError(e);
+            return;
+         }
+      }
+   };
+
+   webAction.setToolTipText("Open a web page"); //$NON-NLS-1$
+   webAction.setImageDescriptor(ImageDescriptor.createFromFile(
+         FavoritesView.class, "web.gif")); //$NON-NLS-1$
+   getViewSite().getActionBars().getToolBarManager().add(webAction);
+}
+
+-------------------------------------------------
+
+https://wiki.eclipse.org/FAQ_How_do_I_show_progress_on_the_workbench_status_line%3F
+
+The workbench progress service (IProgressService) is the primary interface to the workbench progress support. It can be obtained from the workbench and then used to show progress for both background operations and operations that run in the UI thread. The main purpose of this class is to provide one-stop shopping for running operations, removing the need for plug-in developers to decide what mechanism should be used for showing progress in a given situation. Another advantage is that the progress dialog shown with these methods provides good support for indicating when an operation is blocked by another and gives the user control to resolve the conflict. Where possible, long running operations should be run using IProgressService#busyCursorWhile: 
+   IProgressService progressService = PlatformUI.getWorkbench().getProgressService();
+   progressService.busyCursorWhile(new IRunnableWithProgress(){
+      public void run(IProgressMonitor monitor) {
+         //do non-UI work
+      }
+   });
+
+
+This method will initially put up a busy cursor, and replace it with a progress dialog if the operation lasts longer than a specified time threshhold. The advantage of this method over using a progress dialog is that the progress dialog won't be shown if the operation is short running . If your operation must update the UI, you can always use Display.asyncExec or Display.syncExec to run the code that modifies the UI.
+
+If an operation must be run in its entirety in the UI thread, then IProgressService#runInUIshould be used. This method will also display a progress dialog if the operation is blocked and give the user control.
+   progressService.runInUI(
+      PlatformUI.getWorkbench().getProgressService(),
+      new IRunnableWithProgress() {
+         public void run(IProgressMonitor monitor) {
+            //do UI work
+         }
+      },
+      Platform.getWorkspace().getRoot());
+
+
+The third parameter can be null, or a scheduling rule for the operation. In this example, we are specifying the workspace root which will essentially lock the workspace while this UI operation is run.
+
+EMLOT
+http://localhost:8080/openrdf-sesame/repositories/emlot-data?query=select%20*%20where%20{?a%20?b%20?c}%20limit%20100
+https://rdf4j.org/documentation/reference/rest-api/
+
+alternative RDF servers:
+https://blazegraph.com/
+https://marmotta.apache.org/index.html
+
+launching app on Windows:
+https://stackoverflow.com/questions/31058033/launch-java-program-on-file-using-windows-open-with-option
+https://wrapper.tanukisoftware.com/doc/english/launch-win.html
+https://wiki.eclipse.org/Eclipse/OpenFileFeature
+https://stackoverflow.com/questions/61652561/how-to-handle-spaces-in-launcher-ini-file-of-rcp-product-configuration
+https://stackoverflow.com/questions/7819466/eclipse-rcp-file-association-launcher-openfile
+https://help.eclipse.org/latest/index.jsp?topic=%2Forg.eclipse.platform.doc.isv%2Fguide%2Fproduct_open_file.htm
+
+http://help.eclipse.org/2021-12/index.jsp?topic=%2Forg.eclipse.platform.doc.isv%2Fguide%2Fproduct_open_file.htm
+http://aniefer.blogspot.com/2010/05/opening-files-in-eclipse-from-command.htmls
+
+PATH FINDING
+https://stackoverflow.com/questions/30916040/sparql-is-there-any-path-between-two-nodes
+
+GRASP: Graphical SPARQL
+
+product configuration problem:
+https://stackoverflow.com/questions/54783595/eclipse-e4-missing-constraint-require-capability-osgi-extender
+https://stackoverflow.com/questions/262261/eclipse-rcp-client-and-redirecting-the-console-to-a-file
+
+grasp.exe -console -consoleLog -debug -noExit
+
+create ICON files:
+gconvert (licensed: version 5 on this machine)
+
+ZESAT and SugiyamaLayoutAlgorithm
+http://www.javased.com/index.php?source_dir=zest%2Forg.eclipse.zest.layouts%2Fsrc%2Forg%2Feclipse%2Fzest%2Flayouts%2Falgorithms%2FSugiyamaLayoutAlgorithm.java

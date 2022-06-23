@@ -1,0 +1,2 @@
+[{"endpoint":"https://romanrepublic.ac.uk/rdf/endpoint","browser":"https://romanrepublic.ac.uk/rdf/repositories/dprr/query?query=","name":"DPRR RDF Server","ontology":"https://romanrepublic.ac.uk/rdf/ontology"},
+{"endpoint":"https://www.poms.ac.uk/rdf/endpoint/","browser":"https://www.poms.ac.uk/rdf/repositories/poms/query?query=","name":"PoMS RDF Server","ontology":"https://www.poms.ac.uk/rdf/ontology"}]

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            name="SPARQL Query Builder"
+            id="uk.ac.kcl.cch.jb.sparql.queryBuilder">
+      </category>
+      <view
+            id="uk.ac.kcl.cch.jb.sparql.views.RDFServersView"
+            name="RDF Servers View"
+            icon="icons/rdf-server-16.gif"
+            class="uk.ac.kcl.cch.jb.sparql.views.RDFServersView"
+            category="uk.ac.kcl.cch.jb.sparql.queryBuilder"
+            inject="true">
+      </view>
+      <view
+            allowMultiple="false"
+            category="uk.ac.kcl.cch.jb.sparql.queryBuilder"
+            class="uk.ac.kcl.cch.jb.sparql.views.ClassesView"
+            icon="icons/class.view.gif"
+            id="uk.ac.kcl.cch.jb.sparql.classesView"
+            name="Classes View"
+            restorable="true">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="org.eclipse.jdt.ui.JavaPerspective">
+         <view
+               id="uk.ac.kcl.cch.jb.sparql.views.RDFSourceView"
+               relative="org.eclipse.ui.views.ProblemView"
+               relationship="right"
+               ratio="0.5">
+         </view>
+      </perspectiveExtension>
+   </extension>
+   <extension
+         point="org.eclipse.help.contexts">
+      <contexts
+            file="contexts.xml">
+      </contexts>
+   </extension>
+   <!-- extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            id="uk.ac.kcl.cch.jb.sparql.actionSets"
+            label="SPARQL Builder"
+            visible="true">
+         <action
+               class="uk.ac.kcl.cch.jb.sparql.actions.OpenServersViewAction"
+               icon="icons/rdf-server-16.gif"
+               id="uk.ac.kcl.cch.jb.sparql.openServersView"
+               label="Open Servers View"
+               style="radio"
+               toolbarPath="Normal"
+               tooltip="Open SPARQL Builder&apos;s Server List View">
+         </action>
+       </actionSet>
+   </extension -->
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            id="uk.ac.kcl.cch.jb.sparql"
+            name="SPARQL Query Builder Wizards">
+      </category>
+      <wizard
+            category="uk.ac.kcl.cch.jb.sparql"
+            class="uk.ac.kcl.cch.jb.sparql.wizards.NewSPARQLQueryFileWizard"
+            icon="icons/sw-cube-16.gif"
+            id="uk.ac.kcl.cch.jb.sparql.NewSPARQLQueryFileWizard"
+            name="SPARQL Query Builder File">
+      </wizard>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="uk.ac.kcl.cch.jb.sparql.editors.QueryCreationEditor"
+            contributorClass="uk.ac.kcl.cch.jb.sparql.editors.QueryEditorActionBarContributor"
+            default="true"
+            extensions="sqf"
+            icon="icons/sw-cube-16.gif"
+            id="uk.ac.kcl.cch.jb.sparql.queryeditor"
+            name="SPARQL Query Editor">
+      </editor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="uk.ac.kcl.cch.jb.sparql.SPARQLQueryPerspectiveFactory"
+            id="uk.ac.kcl.cch.jb.sparql.perspective"
+            name="SPARQLBuilder">
+      </perspective>
+   </extension>
+
+</plugin>
