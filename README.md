@@ -3,7 +3,9 @@ Code for experimental graphical SPARQL query builder.
 
 GRASP (GRAphical SParql builder) is written in Java and is built using the Eclipse plugin framework.  Drawing on GEF (legacy), rdf4j and OWL Ontology representations
 (in particular HermiT) it provides a graphical environment where users can create SPARQL queries that align with a given OWL Ontology.  Queries built graphically
-are saved in a JSON-based file format, but can be translated into standard SPARQL and run against a repository of data.
+are saved in a JSON-based file format, but can be translated into standard SPARQL and run against a repository of data.  Here it is in operation:
+
+![GRASP in operation](https://github.com/johnBradley501/grasp-repo/blob/master/misc/grasp.png)
 
 By default GRASP operates against two RDF repositories that are well known to its author (https://romanrepublic.ac.uk/rdf/doc/ and https://www.poms.ac.uk/rdf/doc/) but the aim is to support any RDF repository that has a suitable OWL Ontology that describes it and that operates a SPARQL query engine that
 conforms with W3C standards.
