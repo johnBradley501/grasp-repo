@@ -1,5 +1,7 @@
 package uk.ac.kcl.cch.jb.sparql.builder;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,7 +34,7 @@ public class Builder {
 		query = whereBuilder.addToQuery(query);
 		query = prefixHandler.addToQuery(query);
 		query = handleQueryModifier(query);
-		return query.getQueryString();
+		return buildHeader()+query.getQueryString();
 	}
 
 	private SelectQuery handleQueryModifier(SelectQuery query2) {
@@ -43,4 +45,13 @@ public class Builder {
 		return query;
 	}
 
+
+	private String buildHeader() {
+		String rslt = "# "+data.getQueryMetadata().title+"\n";
+		rslt = rslt+"# for "+data.getQueryMetadata().endpoint+" ("+data.getQueryMetadata().serverName+")\n";
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm:ss");  
+		LocalDateTime now = LocalDateTime.now();  
+		rslt = rslt + "# "+dtf.format(now)+"\n\n";  
+		return rslt;
+	}
 }
