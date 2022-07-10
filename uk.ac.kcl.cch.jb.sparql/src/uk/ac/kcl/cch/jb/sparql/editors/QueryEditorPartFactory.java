@@ -6,6 +6,7 @@ import org.eclipse.gef.editparts.FreeformGraphicalRootEditPart;
 import uk.ac.kcl.cch.jb.sparql.model.QuerySelectClause;
 import uk.ac.kcl.cch.jb.sparql.model.QueryWhereClause;
 import uk.ac.kcl.cch.jb.sparql.model.SPARQLQuery;
+import uk.ac.kcl.cch.jb.sparql.model.SelectAreaFront;
 import uk.ac.kcl.cch.jb.sparql.model.SelectClauseModifier;
 import uk.ac.kcl.cch.jb.sparql.model.SelectVarItem;
 import uk.ac.kcl.cch.jb.sparql.model.ClassComponent;
@@ -17,11 +18,10 @@ import uk.ac.kcl.cch.jb.sparql.model.WhereClausePredicate;
 import uk.ac.kcl.cch.jb.sparql.parts.ClassComponentPart;
 import uk.ac.kcl.cch.jb.sparql.parts.DataConstraintPart;
 import uk.ac.kcl.cch.jb.sparql.parts.InstanceComponentPart;
-import uk.ac.kcl.cch.jb.sparql.parts.ModifierComponentPart;
 import uk.ac.kcl.cch.jb.sparql.parts.QueryRootEditPart;
 import uk.ac.kcl.cch.jb.sparql.parts.QuerySelectClausePart;
 import uk.ac.kcl.cch.jb.sparql.parts.QueryWhereClausePart;
-import uk.ac.kcl.cch.jb.sparql.parts.SelectClauseModifierPart;
+import uk.ac.kcl.cch.jb.sparql.parts.SelectAreaFrontPart;
 import uk.ac.kcl.cch.jb.sparql.parts.SelectVarItemPart;
 import uk.ac.kcl.cch.jb.sparql.parts.VariableComponentPart;
 import uk.ac.kcl.cch.jb.sparql.parts.WhereClauseComponentPart;
@@ -56,12 +56,15 @@ public class QueryEditorPartFactory extends WorkbenchAwarePartFactory {
 		if(model instanceof WhereClausePredicate) {
 			return new WhereClausePredicatePart((WhereClausePredicate)model, myEditor);
 		}
-		if(model instanceof SelectClauseModifier) {
-			return new SelectClauseModifierPart((SelectClauseModifier)model, myEditor);
+		//if(model instanceof SelectClauseModifier) {
+		//	return new SelectClauseModifierPart((SelectClauseModifier)model, myEditor);
+		//}
+		if(model instanceof SelectAreaFront) {
+			return new SelectAreaFrontPart((SelectAreaFront)model, myEditor);
 		}
-		if(model instanceof ModifierComponent) {
-			return new ModifierComponentPart((ModifierComponent)model, myEditor);
-		}
+		//if(model instanceof ModifierComponent) {
+		//	return new ModifierComponentPart((ModifierComponent)model, myEditor);
+		//}
 		if(model instanceof SelectVarItem) {
 			return new SelectVarItemPart((SelectVarItem)model, myEditor);
 		}

@@ -10,10 +10,10 @@ public class SetQueryLimitCommand extends DirtyCommand {
 	private SelectClauseModifier myModifier;
 	private int oldVal;
 
-	public SetQueryLimitCommand(ModifierComponent myMC, int newVal, QueryCreationEditor myEditor) {
+	public SetQueryLimitCommand( SelectClauseModifier myModifier, int newVal, QueryCreationEditor myEditor) {
 		super(myEditor);
 		this.setLabel("Changing Query Limit to "+newVal);
-		this.myModifier = myMC.getModifier();
+		this.myModifier = myModifier;
 		this.newVal = newVal;
 		this.oldVal = myModifier.getLimit();
 	}

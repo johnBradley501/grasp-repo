@@ -14,6 +14,7 @@ import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import uk.ac.kcl.cch.jb.sparql.editors.QueryCreationEditor;
 import uk.ac.kcl.cch.jb.sparql.figures.SelectClauseFigure;
 import uk.ac.kcl.cch.jb.sparql.model.QuerySelectClause;
+import uk.ac.kcl.cch.jb.sparql.model.SelectAreaFront;
 import uk.ac.kcl.cch.jb.sparql.policies.SelectClauseLayoutPolicy;
 
 public class QuerySelectClausePart extends AbstractGraphicalEditPart implements PropertyChangeListener {
@@ -62,7 +63,7 @@ public class QuerySelectClausePart extends AbstractGraphicalEditPart implements 
 	
 	public List getModelChildren() {
 		List children = new ArrayList();
-		children.add(getSelectClause().getModifier());
+		children.add(new SelectAreaFront(getSelectClause()));
 		children.addAll(getSelectClause().getVars());
 		return children;
 	}

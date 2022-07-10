@@ -78,25 +78,10 @@ import uk.ac.kcl.cch.jb.sparql.parts.QueryWhereClausePart;
 import uk.ac.kcl.cch.jb.sparql.utils.CompleteGraphButtonHandler;
 import uk.ac.kcl.cch.jb.sparql.utils.CompleteGraphChecker;
 
-public class QueryCreationEditor extends MultiPageEditorPart implements IResourceChangeListener, PropertyChangeListener,  CanBeDirty {
+public class QueryCreationEditor extends MultiPageEditorPart implements IResourceChangeListener, CanBeDirty { // PropertyChangeListener, 
 	
 	public static final String EDITOR_ID = "uk.ac.kcl.cch.jb.sparql.queryeditor";
 	private static Color infoPanelBackground = new Color(null, 255, 255, 200);
-	
-	private static Image clipboardIcon = null;
-	private static Image getClipboardIcon() {
-		if(clipboardIcon == null)
-			clipboardIcon = Activator.getImageDescriptor("icons/clipboard-16.png").createImage();
-		return clipboardIcon;
-		
-	}
-	private static Image browserIcon = null;
-	private static Image getBrowserIcon() {
-		if(browserIcon == null)
-			browserIcon = Activator.getImageDescriptor("icons/browserIcon.gif").createImage();
-		return browserIcon;
-		
-	}
 	
 	private SPARQLQuery query = null;
 	private IFile workspaceQueryFile = null;
@@ -107,15 +92,14 @@ public class QueryCreationEditor extends MultiPageEditorPart implements IResourc
 	private Control gefArea = null;
 	private QueryEditorPartFactory myPartFactory = null;
 	private CompleteGraphChecker graphChecker = null;
-	private CompleteGraphButtonHandler layoutButtonChecker = null;
-	private CompleteGraphButtonHandler sendtoClipboardButtonChecker = null;
-	private CompleteGraphButtonHandler sendtoWebButtonChecker = null;
+	// private CompleteGraphButtonHandler layoutButtonChecker = null;
+	// private CompleteGraphButtonHandler sendtoClipboardButtonChecker = null;
+	// private CompleteGraphButtonHandler sendtoWebButtonChecker = null;
 	
 	private boolean isDirtyFlag = false;
-	private Label serverLabel;
-	private Combo layoutCombo;
-	private static final String[] layoutNames = {"Spring", "Radial", "Vert Tree", "Horiz Tree"};
-	private static LayoutAlgorithm[] layoutAlgos = null;
+	// private Label serverLabel;
+	// private Combo layoutCombo;
+	private TitleAreaManager titleAreaManager = null;
 	
 	public QueryCreationEditor() {
 		super();
@@ -124,13 +108,11 @@ public class QueryCreationEditor extends MultiPageEditorPart implements IResourc
 	
 	public void dispose() {
 		ResourcesPlugin.getWorkspace().removeResourceChangeListener(this);
-		if(query != null)query.removePropertyChangeListener(this);
+		// if(query != null)query.removePropertyChangeListener(this);
 		if(gefHandler != null)gefHandler.dispose();
 		if(query != null)query.dispose();
-		if(layoutButtonChecker != null)layoutButtonChecker.dispose();
-		if(sendtoClipboardButtonChecker != null)sendtoClipboardButtonChecker.dispose();
-		if(sendtoWebButtonChecker != null)sendtoWebButtonChecker.dispose();
 		if(graphChecker != null)graphChecker.dispose();
+		if(titleAreaManager != null)titleAreaManager.dispose();
 		super.dispose();
 	}
 
@@ -173,7 +155,7 @@ public class QueryCreationEditor extends MultiPageEditorPart implements IResourc
 		}
 		if(query == null)
 			throw new PartInitException("Invalid Input: The file is not in the SPARQL Query format.");
-		query.addPropertyChangeListener(this);
+		// query.addPropertyChangeListener(this);
 
 
 		super.init(site, editorInput);
@@ -185,6 +167,11 @@ public class QueryCreationEditor extends MultiPageEditorPart implements IResourc
 		gefHandler.setMyFactory(myPartFactory);
 		
 		graphChecker = new CompleteGraphChecker(query);
+		titleAreaManager = new TitleAreaManager(this);
+	}
+	
+	public CompleteGraphChecker getGraphChecker() {
+		return graphChecker;
 	}
 	
 	public void doUpdateForSaveAs(IEditorInput editorInput) {
@@ -252,7 +239,8 @@ public class QueryCreationEditor extends MultiPageEditorPart implements IResourc
 		layout.numColumns = 1;
 		
 		
-		defineTitleArea(composite);
+		// defineTitleArea(composite);
+		titleAreaManager.defineTitleArea(composite);
 		
 		defineGEFArea(composite);
 		
@@ -260,7 +248,7 @@ public class QueryCreationEditor extends MultiPageEditorPart implements IResourc
 		setPageText(index, "Builder");
 	}
 	
-	private void defineTitleArea(Composite composite) {
+	/* private void defineTitleArea(Composite composite) {
 		// Composite infoPanel = new Composite(composite, SWT.NONE);
 		Group infoPanel = new Group(composite, SWT.NONE);
 		GridLayout layout = new GridLayout();
@@ -331,9 +319,9 @@ public class QueryCreationEditor extends MultiPageEditorPart implements IResourc
 		});
 		sendtoWebButtonChecker = new CompleteGraphButtonHandler(graphChecker, sendToWebButton);
 
-	}
+	} */
 	
-	private void BuildLayoutDropdown(Group infoPanel) {
+	/* private void BuildLayoutDropdown(Group infoPanel) {
 		layoutCombo = new Combo(infoPanel, SWT.READ_ONLY);
 		layoutCombo.setItems(layoutNames);
 		layoutCombo.select(0);
@@ -346,15 +334,15 @@ public class QueryCreationEditor extends MultiPageEditorPart implements IResourc
 			layoutAlgos[3] = new HorizontalTreeLayoutAlgorithm(LayoutStyles.NO_LAYOUT_NODE_RESIZING);
 		}
 
-	}
+	} */
 	
-	public LayoutAlgorithm getSelectedLayout() {
+	/* public LayoutAlgorithm getSelectedLayout() {
 		int i = layoutCombo.getSelectionIndex();
 		if((i == -1) || (i >= layoutNames.length))return layoutAlgos[0];
 		return layoutAlgos[i];
-	}
+	} */
 
-	private void handleChangeMetadataButtonPush() {
+	/* private void handleChangeMetadataButtonPush() {
 		QueryMetadataDialog dlg = new QueryMetadataDialog(Display.getCurrent().getActiveShell(), getQuery());
 		int rc = dlg.open();
 		if(rc == Window.OK) {
@@ -363,15 +351,15 @@ public class QueryCreationEditor extends MultiPageEditorPart implements IResourc
 				getCommandStack().execute(new UpdateQueryMetadataCommand(this, getQuery(), newMD));
 			}
 		}
-	}
+	} */
 
 
-	private void handleDoLayoutButtonPush() {
+	/* private void handleDoLayoutButtonPush() {
 		DoLayoutAction action = new DoLayoutAction(this);
 		action.run();
-	}
+	} */
 	
-	private void handleSendToClipboard() {
+	/* private void handleSendToClipboard() {
 		Builder b = new Builder(getQuery());
 		//System.out.println(b.toSPARQL());
 		// see http://www.avajava.com/tutorials/lessons/how-do-i-copy-a-string-to-the-clipboard.html
@@ -379,7 +367,7 @@ public class QueryCreationEditor extends MultiPageEditorPart implements IResourc
 		Clipboard clipboard = toolkit.getSystemClipboard();
 		StringSelection strSel = new StringSelection(b.toSPARQL());
 		clipboard.setContents(strSel, null);
-	}
+	} */
 
 	
 	private void defineGEFArea(Composite composite) {
@@ -448,7 +436,7 @@ public class QueryCreationEditor extends MultiPageEditorPart implements IResourc
 	@Override
 	public void doSaveAs() {
 		InputCreatingAction action = null;
-		boolean didDoSaveAs = false;
+		// boolean didDoSaveAs = false;
 		if(workspaceQueryFile!=null) action = new DoWorkSpaceSaveAsAction(workspaceQueryFile);
 		else if(externalQueryFile != null) action = new DoExternalSaveAsAction(externalQueryFile);
 		if(action != null) {
@@ -463,7 +451,7 @@ public class QueryCreationEditor extends MultiPageEditorPart implements IResourc
 		return true;
 	}
 
-	@Override
+	/* @Override
 	public void propertyChange(PropertyChangeEvent arg0) {
 		if(arg0.getPropertyName().equals(SPARQLQuery.METADATA_CHANGED)) {
 			QueryMetadata meta = (QueryMetadata)arg0.getNewValue();
@@ -471,6 +459,6 @@ public class QueryCreationEditor extends MultiPageEditorPart implements IResourc
 			serverLabel.setText(query.getServerName()+" <"+query.getEndpoint().toString()+">");
 		}
 		
-	}
+	} */
 
 }

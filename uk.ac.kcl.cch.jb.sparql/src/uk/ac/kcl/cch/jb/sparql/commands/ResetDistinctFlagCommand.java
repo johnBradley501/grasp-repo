@@ -9,8 +9,8 @@ public class ResetDistinctFlagCommand extends DirtyCommand {
 
 	public ResetDistinctFlagCommand(SelectClauseModifier modifier, QueryCreationEditor myEditor) {
 		super(myEditor);
-		String toWhat = "Multiple";
-		if(modifier.isDistinct()) toWhat = "Distinct";
+		String toWhat = "Distinct";
+		if(modifier.isDistinct()) toWhat = "Multiple";
 		this.setLabel("Change Distinct setting to "+toWhat);
 		this.modifier = modifier;
 	}

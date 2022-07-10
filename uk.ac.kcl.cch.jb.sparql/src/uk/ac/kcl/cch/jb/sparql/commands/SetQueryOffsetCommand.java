@@ -10,10 +10,10 @@ public class SetQueryOffsetCommand extends DirtyCommand {
 	private int newVal;
 	private int oldVal;
 
-	public SetQueryOffsetCommand(ModifierComponent myMC, int newVal, QueryCreationEditor myEditor) {
+	public SetQueryOffsetCommand(SelectClauseModifier myModifier, int newVal, QueryCreationEditor myEditor) {
 		super(myEditor);
 		this.setLabel("Setting Query Offset to "+newVal);
-		this.myModifier = myMC.getModifier();
+		this.myModifier = myModifier;
 		this.newVal = newVal;
 		this.oldVal = myModifier.getLimit();
 	}

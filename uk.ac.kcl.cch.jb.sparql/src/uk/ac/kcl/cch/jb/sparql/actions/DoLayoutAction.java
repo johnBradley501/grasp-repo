@@ -20,15 +20,16 @@ import uk.ac.kcl.cch.jb.sparql.parts.QueryWhereClausePart;
 public class DoLayoutAction extends Action {
 
 	private QueryCreationEditor myEditor;
+	private LayoutAlgorithm theLayout;
 
-	public DoLayoutAction(QueryCreationEditor myEditor) {
+	public DoLayoutAction(QueryCreationEditor myEditor, LayoutAlgorithm theLayout) {
 		super();
 		setText("Do Layout");
 		this.myEditor = myEditor;
+		this.theLayout = theLayout;
 	}
 	
 	public void run() {
-		LayoutAlgorithm theLayout = myEditor.getSelectedLayout();
 		myEditor.getCommandStack().execute(new DoLayoutCommand(myEditor, theLayout));
 		// int style = LayoutStyles.NO_LAYOUT_NODE_RESIZING;
 		//CompositeLayoutAlgorithm composite = new CompositeLayoutAlgorithm(style,

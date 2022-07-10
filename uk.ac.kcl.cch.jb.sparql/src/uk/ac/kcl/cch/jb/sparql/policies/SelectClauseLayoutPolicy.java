@@ -15,7 +15,6 @@ import uk.ac.kcl.cch.jb.sparql.commands.MoveVarItemCommand;
 import uk.ac.kcl.cch.jb.sparql.model.INamedComponent;
 import uk.ac.kcl.cch.jb.sparql.model.SelectVarItem;
 import uk.ac.kcl.cch.jb.sparql.parts.QuerySelectClausePart;
-import uk.ac.kcl.cch.jb.sparql.parts.SelectClauseModifierPart;
 import uk.ac.kcl.cch.jb.sparql.parts.SelectVarItemPart;
 
 public class SelectClauseLayoutPolicy extends OrderedLayoutEditPolicy {
