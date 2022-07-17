@@ -6,6 +6,7 @@ import java.beans.PropertyChangeListener;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.LineBorder;
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
@@ -82,7 +83,10 @@ public class DataConstraintPart extends AbstractGraphicalEditPart implements Pro
 	}
 	
 	private void performDirectEditing(LocationRequest req) {
-		int myType = getDataConstraintFigure().getSelectedType(req.getLocation());
+		Point rellocation = new Point(req.getLocation());
+		getFigure().getParent().translateToRelative(rellocation); // not sure I understand why this is needed   JB
+		// int myType = getDataConstraintFigure().getSelectedType(req.getLocation());
+		int myType = getDataConstraintFigure().getSelectedType(rellocation);
 		directEditPolicy.setField(myType);
 		if(myType == DataConstraintFigure.TYPE_FIELD) {
 			Label label = getDataConstraintFigure().getTypeLabel();

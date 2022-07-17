@@ -24,6 +24,7 @@
          point="org.eclipse.core.runtime.products">
       <product
             application="uk.ac.kcl.cch.jb.sparql.rcp.application"
+            description="Graphical SPARQL Query tool"
             name="GRASP: Graphical SPARQL Query tool">
          <property
                name="appName"

@@ -174,6 +174,9 @@ public class QueryCreationEditor extends MultiPageEditorPart implements IResourc
 		return graphChecker;
 	}
 	
+	public IFile getWorkspaceQueryFile() {return workspaceQueryFile;}
+	public File getExternalQueryFile() {return externalQueryFile;}
+	
 	public void doUpdateForSaveAs(IEditorInput editorInput) {
 		if(editorInput == null)return;
 		setPartName(editorInput.getName());

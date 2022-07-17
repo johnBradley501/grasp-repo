@@ -37,6 +37,7 @@ import org.eclipse.zest.layouts.algorithms.TreeLayoutAlgorithm;
 
 import uk.ac.kcl.cch.jb.sparql.Activator;
 import uk.ac.kcl.cch.jb.sparql.actions.DoLayoutAction;
+import uk.ac.kcl.cch.jb.sparql.actions.ExportToSPARQLAction;
 import uk.ac.kcl.cch.jb.sparql.actions.SendQueryToWebAction;
 import uk.ac.kcl.cch.jb.sparql.builder.Builder;
 import uk.ac.kcl.cch.jb.sparql.commands.ResetDistinctFlagCommand;
@@ -78,6 +79,7 @@ public class TitleAreaManager implements PropertyChangeListener {
 	private CompleteGraphButtonHandler sendtoClipboardButtonChecker = null;
 	private CompleteGraphButtonHandler layoutButtonChecker = null;
 	private CompleteGraphButtonHandler sendtoWebButtonChecker = null;
+	private CompleteGraphButtonHandler exportButtonChecker = null;
 
 	private NaturalNumberTextFieldManager limitManager;
 	private NaturalNumberTextFieldManager offsetManager;
@@ -99,6 +101,7 @@ public class TitleAreaManager implements PropertyChangeListener {
 		if(layoutButtonChecker != null)layoutButtonChecker.dispose();
 		if(sendtoClipboardButtonChecker != null)sendtoClipboardButtonChecker.dispose();
 		if(sendtoWebButtonChecker != null)sendtoWebButtonChecker.dispose();
+		if(exportButtonChecker != null)exportButtonChecker.dispose();
 	}
 	
 	private SPARQLQuery getQuery() {
@@ -343,6 +346,16 @@ private void defineGenerationArea(Composite parent) {
 		}
 	});
 	sendtoWebButtonChecker = new CompleteGraphButtonHandler(myEditor.getGraphChecker(), sendToWebButton);
+	
+	Button exportButton = new Button(generationArea, SWT.FLAT);
+	exportButton.setImage(ExportToSPARQLAction.getMyIcon());
+	exportButton.addSelectionListener(new SelectionAdapter() {
+		public void widgetSelected(SelectionEvent event) {
+			Action theAction = new ExportToSPARQLAction(myEditor);
+			theAction.run();
+		}
+	});
+	exportButtonChecker = new CompleteGraphButtonHandler(myEditor.getGraphChecker(), exportButton);
 
 }
 
