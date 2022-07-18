@@ -19,3 +19,9 @@ access for a standalone version of GRASP:
 * uk.ac.kcl.cch.jb.sparql.wbk: provides a small amount of code that allows GRASP to work within the Eclipse Workbench file access mechanisms.
 
 This code is made available through the Eclipse Public License - v 2.0
+
+A working copy of GRASP (unfortunately for Windows only -- I do not have a Macintosh, and could not make the mechanisms work
+that are supposed to generate a Mac version on my Windows machine) can be loaded from
+[here](https://github.com/johnBradley501/grasp-repo/raw/master/misc/grasp.zip).
+Unzip the contents, and place the directory wherever you like.  Inside it you will find `grasp.exe`
+which is the executable that starts GRASP. GRASP requires at least Java 1.8 to be set up on your machine.
