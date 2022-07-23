@@ -23,7 +23,8 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
         configurer.setInitialSize(new Point(1000, 800));
         configurer.setShowCoolBar(true);
         configurer.setShowStatusLine(false);
-        configurer.setTitle("GRASP: Graphical SPARQL Query tool"); //$NON-NLS-1$
+        // configurer.setTitle("GRASP: Graphical SPARQL Query tool"); //$NON-NLS-1$
+        configurer.setTitle("GRASP"); //$NON-NLS-1$
 
         //configurer.setShowStatusLine(true);
         //configurer.setShowProgressIndicator(true);

@@ -25,10 +25,10 @@
       <product
             application="uk.ac.kcl.cch.jb.sparql.rcp.application"
             description="Graphical SPARQL Query tool"
-            name="GRASP: Graphical SPARQL Query tool">
+            name="GRASP">
          <property
                name="appName"
-               value="GRASP: Graphical SPARQL Query tool">
+               value="GRASP">
          </property>
          <property
                name="windowImages"
