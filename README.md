@@ -24,6 +24,6 @@ A working copy of GRASP (unfortunately for Windows only -- I do not have a Macin
 that are supposed to generate a Mac version on my Windows machine) can be loaded from
 [here](https://github.com/johnBradley501/grasp-repo/raw/master/misc/grasp.zip).
 Unzip the contents, and place the directory wherever you like.  Inside it you will find `grasp.exe`
-which is the executable that starts GRASP. GRASP requires at least Java 1.8 to be set up on your machine.
+which is the executable that starts GRASP. GRASP requires at least Java 11 to be set up on your machine.
 
 More information to get you started using GRASP can be found in this repo's [wiki pages](https://github.com/johnBradley501/grasp-repo/wiki).
