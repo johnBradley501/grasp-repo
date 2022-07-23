@@ -17,6 +17,19 @@ import uk.ac.kcl.cch.jb.sparql.model.DataConstraint;
 
 public class DataConstraintFigure extends Figure {
 	
+	private static int constraintHeight = 0;
+	
+	public static int getConstraintHeight() {
+		if(constraintHeight == 0) {
+			// there must be a better way than this...    JB
+			constraintHeight = 18; // temporary value stops looping because of reference to this function inside DataConstraintFigure constructor.
+			DataConstraint dummyDC = new DataConstraint(null);
+			DataConstraintFigure dummyDCF = new DataConstraintFigure(dummyDC);
+			constraintHeight = dummyDCF.getMinimumSize().height;
+		}
+		return constraintHeight;
+	}
+	
 	public static final int TYPE_FIELD = 0;
 	public static final int VAL_FIELD = 1;
 	
@@ -43,8 +56,8 @@ public class DataConstraintFigure extends Figure {
 		
 		typeHolder = new Figure();
 		typeHolder.setBorder(new LineBorder(1));
-		typeHolder.setPreferredSize(50, VariableComponentFigure.constraintHeight-1);
 		typeHolder.setLayoutManager(new StackLayout());
+		typeHolder.setPreferredSize(50, getConstraintHeight()-1);
 		this.add(typeHolder);
 		
 		this.typeLabel = new Label();
@@ -67,6 +80,8 @@ public class DataConstraintFigure extends Figure {
 		valueHolder.add(valueLabel);
 		
 		this.setOpaque(true);
+		//if(constraintHeight == 0)constraintHeight = this.getMinimumSize().height+1;
+		// typeHolder.setPreferredSize(50, getConstraintHeight()-1);
 		
 	}
 	

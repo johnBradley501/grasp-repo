@@ -20,8 +20,8 @@ import uk.ac.kcl.cch.jb.sparql.model.VariableComponent;
 
 public class VariableComponentFigure extends RectangleFigure implements VarNameFigure{
 
-	public static int nameHeight = 20;
-	public static int constraintHeight = 18;
+	public static int nameHeight = -1;
+	// public static int constraintHeight = 18;
 	public static Dimension DEFAULT_DIMENSION = new Dimension(200,nameHeight);
 
 	private VariableComponent myComponent;
@@ -45,8 +45,10 @@ public class VariableComponentFigure extends RectangleFigure implements VarNameF
 		myName.setLabelAlignment(PositionConstants.CENTER);
 		myName.setBorder(new LineBorder(VarNameFigure.COLOUR_PURPLE, 3));
 		myName.setText(myComponent.getName());
+		myName.setFont(Display.getCurrent().getSystemFont());
 		layout.setConstraint(myName, new GridData(GridData.FILL_HORIZONTAL));
 		this.add(myName);
+		if(nameHeight == -1)nameHeight = myName.getMinimumSize().height;
 		
 		constraintArea = new Figure();
 		// constraintArea.setBackgroundColor(ColorConstants.cyan);

@@ -11,6 +11,7 @@ import org.json.JSONObject;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLDatatype;
 
+import uk.ac.kcl.cch.jb.sparql.figures.DataConstraintFigure;
 import uk.ac.kcl.cch.jb.sparql.figures.VariableComponentFigure;
 
 public class VariableComponent extends NamedComponent {
@@ -100,7 +101,7 @@ public class VariableComponent extends NamedComponent {
 	
 	public Rectangle getMyBounds() {
 		Rectangle r = new Rectangle(super.getMyBounds());
-		r.height = VariableComponentFigure.nameHeight+VariableComponentFigure.constraintHeight*constraints.size();
+		r.height = VariableComponentFigure.nameHeight+DataConstraintFigure.getConstraintHeight()*constraints.size();
 		return r;
 	}
 

@@ -60,6 +60,7 @@ public abstract class WhereClauseComponentPart extends AbstractGraphicalEditPart
 	
 	public void refreshVisuals() {
 		mapToBounds();
+		super.refreshVisuals();
 	}
 	
 	protected void mapToBounds() {
