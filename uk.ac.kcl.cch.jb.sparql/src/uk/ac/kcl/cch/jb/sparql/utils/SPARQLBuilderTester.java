@@ -29,6 +29,7 @@ public class SPARQLBuilderTester extends Action implements IWorkbenchWindowActio
 	public void run(IAction action) {
 		SelectQuery query = Queries.SELECT();
 		
+		/*
 		Prefix foaf = SparqlBuilder.prefix("foaf", Rdf.iri("http://xmlns.com/foaf/0.1/"));
 		Variable name = SparqlBuilder.var("name");
 		Variable x = SparqlBuilder.var("x");
@@ -36,10 +37,9 @@ public class SPARQLBuilderTester extends Action implements IWorkbenchWindowActio
 		Variable address = SparqlBuilder.var("address");
 		
 		Expression countAgg = Expressions.count(y);
-		System.out.println("countAgg: "+countAgg.getQueryString());
+		// System.out.println("countAgg: "+countAgg.getQueryString());
 		Variable count = SparqlBuilder.var("count");
-		
-		GraphPattern pat = x.isA(foaf.iri("Person"))
+			GraphPattern pat = x.isA(foaf.iri("Person"))
 				.andHas(foaf.iri("name"), name).andHas(foaf.iri("affiliation"), y)
 				.filter(Expressions.regex(name, "abcd")).filter(Expressions.regex(y,"DFGH"));
 		
@@ -53,6 +53,41 @@ public class SPARQLBuilderTester extends Action implements IWorkbenchWindowActio
 	    .orderBy(name)
 	    .limit(5)
 	    .offset(10).prefix(foaf);
+		
+		GraphPattern pat = x.isA(foaf.iri("Person"))
+				.andHas(foaf.iri("name"), name).andHas(foaf.iri("affiliation"), y)
+				.filter(Expressions.regex(name, "abcd")).filter(Expressions.regex(y,"DFGH"));
+		
+	
+		GraphPattern pat2 = y.isA(foaf.iri("Institution"))
+				.andHas(foaf.iri("address"), address).optional();
+		
+		query.select(x).select(name)
+		.select(countAgg.as(count))
+		.where(pat.and(pat2))
+	    .orderBy(name)
+	    .limit(5)
+	    .offset(10).prefix(foaf);
+		 */
+		Prefix poms = SparqlBuilder.prefix("poms", Rdf.iri("https://www.poms.ac.uk/rdf/ontology#"));
+		Variable hasname = SparqlBuilder.var("hasname");
+		Variable transfactoid = SparqlBuilder.var("transactionfactoid");
+		Variable legalpertinent = SparqlBuilder.var("legalpertinent");
+		
+		GraphPattern pat = transfactoid.isA(poms.iri("TransactionFactoid"));
+		GraphPattern optPat = GraphPatterns.tp(transfactoid,
+				poms.iri("hasLegalPertinent"),
+				legalpertinent);
+		
+		TriplePattern subPat = legalpertinent.isA(poms.iri("LegalPertinent"));
+		subPat = subPat.andHas(poms.iri("hasName"),hasname);
+		optPat = optPat.and(subPat).optional();
+		pat = pat.and(optPat);
+		
+		query.select(hasname).select(transfactoid)
+		.where(pat)
+		.orderBy(hasname)
+		.prefix(poms);
 		
 		System.out.println(query.getQueryString());
 		

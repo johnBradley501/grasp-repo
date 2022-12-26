@@ -16,7 +16,7 @@ import uk.ac.kcl.cch.jb.sparql.editors.QueryCreationEditor;
 import uk.ac.kcl.cch.jb.sparql.figures.WhereClausePredicateFigure;
 import uk.ac.kcl.cch.jb.sparql.model.WhereClausePredicate;
 
-public class WhereClausePredicatePart extends AbstractConnectionEditPart { // implements PropertyChangeListener {
+public class WhereClausePredicatePart extends AbstractConnectionEditPart implements PropertyChangeListener {
 
 	private QueryCreationEditor myEditor;
 
@@ -33,12 +33,23 @@ public class WhereClausePredicatePart extends AbstractConnectionEditPart { // im
 	protected IFigure createFigure() {
 		return new WhereClausePredicateFigure(getWhereClausePredicate());
 	}
+	
+	public WhereClausePredicateFigure getWhereClausePredicateFigure() {
+		return (WhereClausePredicateFigure)getFigure();
+	}
 
-	//@Override
-	//public void propertyChange(PropertyChangeEvent arg0) {
-	//	// TODO Auto-generated method stub
-
-	//}
+	
+	public void activate() {
+		if(this.isActive()) return;
+		getWhereClausePredicate().addPropertyChangeListener(this);
+		super.activate();
+	}
+	
+	public void deactivate() {
+		if(!isActive())return;
+		super.deactivate();
+		getWhereClausePredicate().removePropertyChangeListener(this);
+	}
 
 	@Override
 	protected void createEditPolicies() {
@@ -49,6 +60,13 @@ public class WhereClausePredicatePart extends AbstractConnectionEditPart { // im
 				return new DeleteWhereClausePredicateCommand(getWhereClausePredicate(), myEditor);
 			}
 		});
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		String pName = evt.getPropertyName();
+		if(pName.equals(WhereClausePredicate.OPTIONAL_CHANGED)) getWhereClausePredicateFigure().setMyLineType();
+		
 	}
 
 }

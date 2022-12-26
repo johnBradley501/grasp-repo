@@ -22,6 +22,8 @@ import uk.ac.kcl.cch.jb.sparql.actions.AddInstanceConstraintAction;
 import uk.ac.kcl.cch.jb.sparql.actions.AddNewVariableComponentAction;
 import uk.ac.kcl.cch.jb.sparql.actions.AddPropertyLinkAction;
 import uk.ac.kcl.cch.jb.sparql.actions.ChangeToSubClassAction;
+import uk.ac.kcl.cch.jb.sparql.actions.DeleteWhereClausePredicateAction;
+import uk.ac.kcl.cch.jb.sparql.actions.SwitchOptionalSettingAction;
 import uk.ac.kcl.cch.jb.sparql.model.ClassItem;
 import uk.ac.kcl.cch.jb.sparql.model.ObjectPropertyItem;
 import uk.ac.kcl.cch.jb.sparql.model.OntologyData;
@@ -70,6 +72,7 @@ public class SPARQLContextMenuProvider extends ContextMenuProvider {
 	public void buildContextMenu(IMenuManager menu) {
 		List selected = getSelectedObjects();
 		handleLinkActions(selected, menu);
+		handlePredicateActions(selected, menu);
 		handleConstraintActions(selected, menu);
 		handleSubClassActions(selected, menu);
 		handleAddVariableActions(selected, menu);
@@ -217,5 +220,15 @@ public class SPARQLContextMenuProvider extends ContextMenuProvider {
 			
 		}
 	}
+	
+
+	private void handlePredicateActions(List selected, IMenuManager menu) {
+		if(selected.size() != 1)return;
+		if((!(selected.get(0) instanceof WhereClausePredicate))) return;
+		WhereClausePredicate pred = (WhereClausePredicate)selected.get(0);
+		menu.add(new DeleteWhereClausePredicateAction(pred, myEditor, commandStack));
+		menu.add(new SwitchOptionalSettingAction(pred, myEditor, commandStack));
+	}
+
 
 }

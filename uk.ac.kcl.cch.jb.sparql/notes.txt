@@ -13,6 +13,7 @@ SPARQL builder:
 https://rdf4j.org/documentation/tutorials/sparqlbuilder/
 https://stackoverflow.com/questions/66967498/constructing-a-sparql-query-using-rdf4j
 https://stackoverflow.com/questions/67588129/how-to-construct-long-queries-using-rdf4j
+https://rdf4j.org/javadoc/3.3.0/index.html?org/eclipse/rdf4j/sparqlbuilder/core/SparqlBuilder.html
 
 filter
 https://en.wikibooks.org/wiki/SPARQL/FILTER
@@ -156,3 +157,81 @@ gconvert (licensed: version 5 on this machine)
 
 ZESAT and SugiyamaLayoutAlgorithm
 http://www.javased.com/index.php?source_dir=zest%2Forg.eclipse.zest.layouts%2Fsrc%2Forg%2Feclipse%2Fzest%2Flayouts%2Falgorithms%2FSugiyamaLayoutAlgorithm.java
+
+OPTIONAL experiments:
+PREFIX : <https://www.poms.ac.uk/rdf/ontology#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+SELECT ?cb ?trans
+where {
+  ?trans a :TransactionFactoid;
+    :hasCommonBurden ?cb
+}
+order by ?cb
+
+PREFIX : <https://www.poms.ac.uk/rdf/ontology#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+SELECT ?cbName ?trans
+where {
+  ?trans a :TransactionFactoid;
+    :hasCommonBurden ?cb.
+  ?cb :hasName ?cbName
+}
+order by ?cbName
+
+PREFIX : <https://www.poms.ac.uk/rdf/ontology#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+SELECT ?cb ?trans
+where {
+  ?trans a :TransactionFactoid.
+    OPTIONAL{?trans   :hasCommonBurden ?cb}
+}
+order by ?cb
+
+
+PREFIX : <https://www.poms.ac.uk/rdf/ontology#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+SELECT ?cbName ?trans
+where {
+  ?trans a :TransactionFactoid.
+    OPTIONAL{?trans   :hasCommonBurden ?cb.
+    ?cb :hasName ?cbName}
+}
+order by ?cbName
+
+PREFIX : <https://www.poms.ac.uk/rdf/ontology#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+SELECT ?cbName (count(?trans) as ?tcount)
+where {
+  ?trans a :TransactionFactoid.
+    OPTIONAL{?trans   :hasCommonBurden ?cb.
+    ?cb :hasName ?cbName}
+}
+group by ?cbName
+
+# Transactions by Legal Pertinent
+# for https://www.poms.ac.uk/rdf/endpoint/ (PoMS RDF Server)
+# 21 Dec 2022 14:40:25
+
+PREFIX : <https://www.poms.ac.uk/rdf/ontology#>
+SELECT ?hasname ( COUNT( ?transactionfactoid ) AS ?transactionfactoid_count )
+WHERE { ?transactionfactoid a :TransactionFactoid ;
+    :hasLegalPertinent ?legalpertinent .
+?legalpertinent a :LegalPertinent ;
+    :hasName ?hasname . }
+GROUP BY ?hasname
+ORDER BY DESC( ?transactionfactoid_count )
+
+
+# Transactions by Legal Pertinent hand modified to include OPTIONAL
+# for https://www.poms.ac.uk/rdf/endpoint/ (PoMS RDF Server)
+# 21 Dec 2022 14:40:25
+
+PREFIX : <https://www.poms.ac.uk/rdf/ontology#>
+SELECT ?hasname ( COUNT( ?transactionfactoid ) AS ?transactionfactoid_count )
+WHERE { ?transactionfactoid a :TransactionFactoid .
+OPTIONAL {?transactionfactoid    :hasLegalPertinent ?legalpertinent .
+?legalpertinent a :LegalPertinent ;
+    :hasName ?hasname . }
+}
+GROUP BY ?hasname
+ORDER BY DESC( ?transactionfactoid_count )

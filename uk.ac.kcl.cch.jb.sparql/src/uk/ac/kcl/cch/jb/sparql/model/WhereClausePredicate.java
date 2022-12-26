@@ -14,11 +14,14 @@ import org.eclipse.zest.layouts.constraints.BasicEdgeConstraints;
 import org.eclipse.zest.layouts.constraints.LabelLayoutConstraint;
 import org.eclipse.zest.layouts.constraints.LayoutConstraint;
 
-public class WhereClausePredicate implements HasURI, LayoutRelationship{
+public class WhereClausePredicate  extends PropertyChangeObject implements HasURI, LayoutRelationship{
+	
+	public static final String OPTIONAL_CHANGED = "OPTIONAL";
 	
 	private PropertyItem property;
 	private WhereClauseComponent domain;
 	private WhereClauseComponent range;
+	private boolean optional = false;
 	
 	// fields for Zest
 	private Object graphData;
@@ -43,6 +46,9 @@ public class WhereClausePredicate implements HasURI, LayoutRelationship{
 			range = clause.lookupComponent(data.getInt("range"));
 			range.addRangePredicate(this);
 		} else range = null;
+		if(data.has("optional")) {
+			optional = data.getBoolean("optional");
+		}
 	}
 	
 	public PropertyItem getProperty() {return property;}
@@ -55,6 +61,13 @@ public class WhereClausePredicate implements HasURI, LayoutRelationship{
 		return range;
 	}
 	
+	public boolean isOptional() {return optional;}
+	public void setOptional(boolean val) {
+		if(optional == val)return;
+		optional = val;
+		this.firePropertyChange(OPTIONAL_CHANGED, !val, val);
+	}
+	
 	public void initializeRange(WhereClauseComponent range) {
 		this.range = range;
 	}
@@ -64,6 +77,7 @@ public class WhereClausePredicate implements HasURI, LayoutRelationship{
 		rslt.put("property", property.getMyIRI().toString());
 		if(domain != null)rslt.put("domain", domain.getID());
 		if(range != null)rslt.put("range", range.getID());
+		if(optional)rslt.put("optional", optional);
 		return rslt;
 	}
 

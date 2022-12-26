@@ -14,6 +14,7 @@ import org.eclipse.rdf4j.sparqlbuilder.core.QueryPattern;
 import org.eclipse.rdf4j.sparqlbuilder.core.Variable;
 import org.eclipse.rdf4j.sparqlbuilder.core.query.SelectQuery;
 import org.eclipse.rdf4j.sparqlbuilder.graphpattern.GraphPattern;
+import org.eclipse.rdf4j.sparqlbuilder.graphpattern.GraphPatterns;
 import org.eclipse.rdf4j.sparqlbuilder.graphpattern.TriplePattern;
 import org.eclipse.rdf4j.sparqlbuilder.rdf.Iri;
 import org.eclipse.rdf4j.sparqlbuilder.rdf.Rdf;
@@ -49,7 +50,8 @@ public class WhereBuilder {
 		ClassComponent first = classComponents.get(classComponents.firstKey());
 		Set<ClassComponent> doneSet = new HashSet<ClassComponent>();
 		
-		return processComponent(first, query, doneSet);
+		GraphPattern pat = processComponent(first, null, doneSet);
+		return query.where(pat);
 	}
 
 	private TreeMap<Integer,ClassComponent> getClassComponents() {
@@ -63,68 +65,73 @@ public class WhereBuilder {
 		return rslt;
 	}
 
-	private SelectQuery processComponent(ClassComponent curr, SelectQuery query, Set<ClassComponent> doneSet) {
-		if(doneSet.contains(curr))return query;
-		doneSet.add(curr);
+	private GraphPattern processComponent(ClassComponent curr, GraphPattern gpat, Set<ClassComponent> doneSet) {
 		// System.out.println("Starting: "+curr.getName());
 		
 		for(WhereClausePredicate pred: curr.getRangePredicates()) {
 			WhereClauseComponent predec = pred.getDomain();
 			if(predec instanceof ClassComponent) {
 				ClassComponent predecl = (ClassComponent)predec;
-				if(!doneSet.contains(predecl))query = processComponent(predecl, query, doneSet);
+				if(!doneSet.contains(predecl))gpat = processComponent(predecl, gpat, doneSet);
 			}
 					
 		}
+		if(doneSet.contains(curr))return gpat;
+		doneSet.add(curr);
 		
 		// System.out.println("Outputting: "+curr.getName());
 		
 		Variable varName = varHandler.find(curr.getName());
-		// curr.getMyClass().getOWLClass().getIRI();
-		//processPrefix(curr.getMyClass().getDisplayURI());
-		//String classURI = curr.getMyClass().getOWLClass().getIRI().toString();
 		
 		TriplePattern pat = varName.isA(prefixHandler.getTheIri(curr));
 		// GraphPattern pat = varName.isA(prefixHandler.getTheIri(curr));
 		List<ClassComponent>processSoon = new ArrayList<ClassComponent>();
 		List<Expression> expressions = new ArrayList<Expression>();
+		List<WhereClausePredicate> optionalPredicates = new ArrayList<WhereClausePredicate>();
 		
 		for(WhereClausePredicate pred: curr.getDomainPredicates()) {
-			WhereClauseComponent domComp = pred.getRange();
-			if(domComp instanceof ClassComponent)pat = processDomainClass((ClassComponent)domComp, pat, pred, processSoon);
-			else if(domComp instanceof InstanceComponent)pat = processInstance((InstanceComponent)domComp, pat, pred);
-			else if(domComp instanceof VariableComponent)pat = processVariable((VariableComponent)domComp, pat, pred, expressions);
+			if(pred.isOptional())optionalPredicates.add(pred);
+			else {
+				WhereClauseComponent domComp = pred.getRange();
+				if(domComp instanceof ClassComponent)pat = processDomainClass((ClassComponent)domComp, pat, pred, processSoon);
+				else if(domComp instanceof InstanceComponent)pat = processInstance((InstanceComponent)domComp, pat, pred);
+				else if(domComp instanceof VariableComponent)pat = processVariable((VariableComponent)domComp, pat, pred, expressions);
+			}
 		}
 		
 		GraphPattern qpat = pat;
 		if(expressions.size() == 1) {
-			query = query.where(qpat.filter(expressions.get(0)));
+			qpat = qpat.filter(expressions.get(0));
 		} else if(expressions.size() > 1) {
-			query = query.where(qpat.filter(Expressions.and(expressions.toArray(new Expression[0]))));
-		} else query = query.where(qpat);
-		//for(Expression exp: expressions) {
-		//	qpat = qpat.filter(exp);
-		//}
-		//query = query.where(qpat);
+			qpat = qpat.filter(Expressions.and(expressions.toArray(new Expression[0])));
+		} 
+		if(gpat == null)gpat = qpat;
+		else gpat = gpat.and(qpat);
+		
+		for(WhereClausePredicate pred: optionalPredicates) {
+			qpat = handleOptional(curr,pred, gpat, doneSet);
+			gpat = gpat.and(qpat);
+		}
 		
 		for(ClassComponent inst: processSoon) {
-			query = processComponent(inst, query, doneSet);
+			gpat = processComponent(inst, gpat, doneSet);
 		}
-		return query;
+		return gpat;
 	}
 
-	//private void processPrefix(String myUri) {
-	//	if(myUri.startsWith("<"))return;
-	//	String [] parts = myUri.split(":");
-	//	prefixHandler.noteUse(parts[0]);
-	//}
-	
-	//private Iri getPredIRI(WhereClausePredicate pred) {
-	//	processPrefix(pred.getProperty().getDisplayURI());
-	//	return Rdf.iri(pred.getProperty().getMyIRI().toString());
-	//	
-	//}
-
+	private GraphPattern handleOptional(ClassComponent curr, WhereClausePredicate pred, GraphPattern qpat, Set<ClassComponent> doneSet) {
+		
+		WhereClauseComponent domComp = pred.getDomain();
+		WhereClauseComponent rangeComp = pred.getRange();
+		GraphPattern optPat = GraphPatterns.tp(varHandler.find(domComp.getName()),
+				prefixHandler.getTheIri(pred),
+				varHandler.find(rangeComp.getName()));
+		if(rangeComp instanceof ClassComponent) {
+			ClassComponent cc = (ClassComponent)rangeComp;
+			optPat = processComponent(cc, optPat, doneSet);
+		}
+		return optPat.optional();
+	}
 
 	private TriplePattern processDomainClass(ClassComponent component, TriplePattern pat, WhereClausePredicate pred, List<ClassComponent> processSoon) {
 		processSoon.add(component);
