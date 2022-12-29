@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="GRASP" uid="uk.ac.kcl.cch.jb.sparql.grasp" id="uk.ac.kcl.cch.jb.sparql.rcp.product" application="uk.ac.kcl.cch.jb.sparql.rcp.application" version="1.1.0.qualifier" useFeatures="false" includeLaunchers="true" autoIncludeRequirements="true">
-
+<product name="GRASP" uid="uk.ac.kcl.cch.jb.sparql.grasp" id="uk.ac.kcl.cch.jb.sparql.rcp.product" application="uk.ac.kcl.cch.jb.sparql.rcp.application" version="1.2.0.qualifier" useFeatures="false" includeLaunchers="true" autoIncludeRequirements="true">
 
    <configIni use="default">
    </configIni>
@@ -26,16 +25,14 @@
       </win>
    </launcher>
 
-
    <vm>
       <windows include="false">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-11</windows>
    </vm>
 
-
    <plugins>
       <plugin id="com.ibm.icu"/>
-      <plugin id="com.sun.jna"/>
-      <plugin id="com.sun.jna.platform"/>
+      <plugin id="com.sun.jna" version="5.8.0.v20210503-0343"/>
+      <plugin id="com.sun.jna.platform" version="5.8.0.v20210406-1004"/>
       <plugin id="javax.annotation"/>
       <plugin id="javax.inject"/>
       <plugin id="javax.servlet"/>
@@ -56,8 +53,8 @@
       <plugin id="org.apache.httpcomponents.httpcore"/>
       <plugin id="org.apache.log4j"/>
       <plugin id="org.apache.xmlgraphics"/>
-      <plugin id="org.bouncycastle.bcpg"/>
-      <plugin id="org.bouncycastle.bcprov"/>
+      <plugin id="org.bouncycastle.bcpg" version="1.70.0.v20220507-1208"/>
+      <plugin id="org.bouncycastle.bcprov" version="1.70.0.v20220507-1208"/>
       <plugin id="org.eclipse.ant.core"/>
       <plugin id="org.eclipse.compare.core"/>
       <plugin id="org.eclipse.core.commands"/>
@@ -118,7 +115,6 @@
       <plugin id="org.eclipse.equinox.registry"/>
       <plugin id="org.eclipse.equinox.security"/>
       <plugin id="org.eclipse.equinox.security.win32.x86_64" fragment="true"/>
-      <plugin id="org.eclipse.equinox.util"/>
       <plugin id="org.eclipse.gef"/>
       <plugin id="org.eclipse.help"/>
       <plugin id="org.eclipse.jdt.annotation"/>
