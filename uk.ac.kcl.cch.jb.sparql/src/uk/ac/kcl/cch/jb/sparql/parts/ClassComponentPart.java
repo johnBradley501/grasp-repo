@@ -58,5 +58,11 @@ public class ClassComponentPart extends WhereClauseComponentPart implements Name
 		super.createEditPolicies();
 	}
 
+	@Override
+	public void handleHover(boolean isHovering) {
+		getWhereComponentFigure().handleHover(isHovering);
+		
+	}
+
 
 }

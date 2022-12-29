@@ -235,3 +235,8 @@ OPTIONAL {?transactionfactoid    :hasLegalPertinent ?legalpertinent .
 }
 GROUP BY ?hasname
 ORDER BY DESC( ?transactionfactoid_count )
+
+Hover
+
+https://www.tabnine.com/code/java/packages/org.eclipse.gef.editpolicies (ElementResizableEditPolicy.showTargetFeedback(...))
+https://github.com/NVIDIA/gef-nsight/blob/master/org.eclipse.gef.examples.flow/src/org/eclipse/gef/examples/flow/policies/ActivityContainerHighlightEditPolicy.java

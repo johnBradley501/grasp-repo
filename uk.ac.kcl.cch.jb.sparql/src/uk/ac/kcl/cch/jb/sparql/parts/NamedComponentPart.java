@@ -9,4 +9,7 @@ public interface NamedComponentPart extends GraphicalEditPart{
 	public INamedComponent getNamedComponent();
 	
 	public VariableComponentFigure getVariableComponentFigure();
+	
+	public void handleHover(boolean isHovering);
+
 }

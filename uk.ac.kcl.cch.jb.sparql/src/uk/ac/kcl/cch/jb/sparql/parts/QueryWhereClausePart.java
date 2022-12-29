@@ -5,6 +5,7 @@ import java.beans.PropertyChangeListener;
 import java.util.List;
 
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 
@@ -77,6 +78,16 @@ public class QueryWhereClausePart extends AbstractGraphicalEditPart implements P
 	
 	public List getModelChildren() {
 		return getWhereClause().getComponents();
+	}
+	
+	public EditPart findPartForModel(Object obj) {
+		for(Object p: this.getChildren()) {
+			if(p instanceof EditPart) {
+				EditPart ep = (EditPart)p;
+				if(obj == ep.getModel())return ep;
+			}
+		}
+		return null;
 	}
 
 

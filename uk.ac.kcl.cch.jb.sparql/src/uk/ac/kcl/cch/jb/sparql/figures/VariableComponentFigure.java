@@ -46,6 +46,7 @@ public class VariableComponentFigure extends RectangleFigure implements VarNameF
 		myName.setBorder(new LineBorder(VarNameFigure.COLOUR_PURPLE, 3));
 		myName.setText(myComponent.getName());
 		myName.setFont(Display.getCurrent().getSystemFont());
+		myName.setOpaque(true);
 		layout.setConstraint(myName, new GridData(GridData.FILL_HORIZONTAL));
 		this.add(myName);
 		if(nameHeight == -1)nameHeight = myName.getMinimumSize().height;
@@ -74,6 +75,17 @@ public class VariableComponentFigure extends RectangleFigure implements VarNameF
 	}
 	
 	public Figure getConstraintArea() {return constraintArea;}
+
+	@Override
+	public void handleHover(boolean isHovering) {
+		if(isHovering) {
+			myName.setBackgroundColor(VarNameFigure.COLOUR_PURPLE);
+			myName.setForegroundColor(ColorConstants.white);
+		} else {
+			myName.setBackgroundColor(ColorConstants.white);
+			myName.setForegroundColor(ColorConstants.black);
+		}
+	}
 	
 	//public void setDepthForConstraints(int numberConstraints) {
 	//	IFigure parent = this.getParent();

@@ -25,6 +25,7 @@ import uk.ac.kcl.cch.jb.sparql.model.VariableComponent;
 import uk.ac.kcl.cch.jb.sparql.model.SelectVarItem;
 import uk.ac.kcl.cch.jb.sparql.policies.SelectVarItemComponentPolicy;
 import uk.ac.kcl.cch.jb.sparql.policies.SelectVarItemDirectEditPolicy;
+import uk.ac.kcl.cch.jb.sparql.policies.SelectVarItemSelectEditPolicy;
 
 public class SelectVarItemPart extends AbstractGraphicalEditPart implements PropertyChangeListener, NamedComponentPart{
 
@@ -121,12 +122,30 @@ public class SelectVarItemPart extends AbstractGraphicalEditPart implements Prop
 		this.directEditPolicy = new SelectVarItemDirectEditPolicy(myEditor);
 		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, directEditPolicy);
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new SelectVarItemComponentPolicy(myEditor));
+		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new SelectVarItemSelectEditPolicy(myEditor));
+
 	}
 
 	@Override
 	public VariableComponentFigure getVariableComponentFigure() {
 		// not needed in this context   JB
 		return null;
+	}
+	
+	public void handleHover(boolean isHovering) {
+		// System.out.println("Hovering status: "+isHovering);
+		getMyFigure().handleHover(isHovering);
+		List eps = getParent().getParent().getChildren();
+		for(Object p: eps) {
+			if(p instanceof QueryWhereClausePart) {
+				QueryWhereClausePart qwcp = (QueryWhereClausePart)p;
+				EditPart tep = qwcp.findPartForModel(getVarItem().getComponent());
+				if(tep == null);
+				if(!(tep instanceof NamedComponentPart))return;
+				NamedComponentPart ncp = (NamedComponentPart)tep;
+				ncp.handleHover(isHovering);
+			}
+		}
 	}
 
 	@Override

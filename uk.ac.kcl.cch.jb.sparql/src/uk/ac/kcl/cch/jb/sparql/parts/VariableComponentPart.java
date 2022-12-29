@@ -80,4 +80,9 @@ public class VariableComponentPart extends WhereClauseComponentPart implements N
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new VariableComponentLayoutEditPolicy(myEditor));
 		super.createEditPolicies();
 	}
+
+	@Override
+	public void handleHover(boolean isHovering) {
+		getVariableComponentFigure().handleHover(isHovering);
+	}
 }

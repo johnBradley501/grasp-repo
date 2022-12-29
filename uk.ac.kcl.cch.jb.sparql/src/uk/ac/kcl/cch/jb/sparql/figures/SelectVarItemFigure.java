@@ -34,7 +34,7 @@ public class SelectVarItemFigure extends Figure implements VarNameFigure {
 		this.setOpaque(true);
 		this.setBackgroundColor(ColorConstants.white);
 		
-		this.nameLabel = makeComponent(myItem.getComponent().getName(),"Variable Name");
+		this.nameLabel = makeComponent(myItem.getComponent().getName(),"Variable Name"); // tooltip names no longer needed  JB
 		this.orderLabel = makeComponent(SelectVarItem.orderings[myItem.getSortOrder()], "Ordering");
 		this.aggregateLabel = makeComponent(myItem.getAggTypeName(), "Aggregation");
 		this.aggNameLabel = makeComponent("", "Agg Varname");
@@ -46,9 +46,10 @@ public class SelectVarItemFigure extends Figure implements VarNameFigure {
 
 	}
 	
-	private Label makeComponent(String initLabel, String tooltipText) {
+	private Label makeComponent(String initValue, String tooltipText) {
 		Figure compFig = new Figure();
-		if(tooltipText != null)compFig.setToolTip(new Label(tooltipText));
+		compFig.setOpaque(true);
+		// if(tooltipText != null)compFig.setToolTip(new Label(tooltipText));
 		compFig.setBorder(new LineBorder());
 		GridLayout layout = new GridLayout(1, true);
 		layout.marginHeight = 0;
@@ -58,7 +59,7 @@ public class SelectVarItemFigure extends Figure implements VarNameFigure {
 		compFig.setLayoutManager(layout);
 		
 		Label myLabel = new Label();
-		myLabel.setText(initLabel);
+		myLabel.setText(initValue);
 		compFig.add(myLabel);
 		this.add(compFig);
 		return myLabel;
@@ -113,5 +114,16 @@ public class SelectVarItemFigure extends Figure implements VarNameFigure {
 	public void setOrderLabelText(String string) {
 		getOrderLabel().setText(string);
 		
+	}
+	
+	public void handleHover(boolean isHovering) {
+		IFigure nameParent = nameLabel.getParent();
+		if(isHovering) {
+			nameParent.setBackgroundColor(VarNameFigure.COLOUR_PURPLE);
+			nameLabel.setForegroundColor(ColorConstants.white);
+		} else {
+			nameParent.setBackgroundColor(ColorConstants.white);
+			nameLabel.setForegroundColor(ColorConstants.black);
+		}
 	}
 }

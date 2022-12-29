@@ -60,6 +60,7 @@ public class WhereComponentFigure extends RectangleFigure implements VarNameFigu
 		myName = new Label();
 		myName.setLabelAlignment(PositionConstants.CENTER);
 		myName.setBorder(new LineBorder(VarNameFigure.COLOUR_PURPLE, 2));
+		myName.setOpaque(true);
 		// myName.setBorder(new LineBorder(1));
 		myName.setText(theComponent.getName());
 		myName.setFont(Display.getCurrent().getSystemFont());
@@ -110,6 +111,17 @@ public class WhereComponentFigure extends RectangleFigure implements VarNameFigu
 		}
 		rect.height = STATIC_HEIGHT;
 		super.setBounds(rect);
+	}
+
+	@Override
+	public void handleHover(boolean isHovering) {
+		if(isHovering) {
+			myName.setBackgroundColor(VarNameFigure.COLOUR_PURPLE);
+			myName.setForegroundColor(ColorConstants.white);
+		} else {
+			myName.setBackgroundColor(ColorConstants.white);
+			myName.setForegroundColor(ColorConstants.black);
+		}
 	}
 
 }

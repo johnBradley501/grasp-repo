@@ -13,5 +13,7 @@ public interface VarNameFigure extends IFigure {
 	public String getName();
 	
 	public Label getNameLabel();
+	
+	public void handleHover(boolean isHovering);
 
 }
