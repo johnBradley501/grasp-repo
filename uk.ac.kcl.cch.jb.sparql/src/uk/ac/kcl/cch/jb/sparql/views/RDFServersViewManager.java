@@ -4,6 +4,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Iterator;
 
+import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.jface.viewers.TableViewer;
 
 import uk.ac.kcl.cch.jb.sparql.model.RDFServer;
@@ -11,9 +12,9 @@ import uk.ac.kcl.cch.jb.sparql.model.RDFServerList;
 
 public class RDFServersViewManager implements PropertyChangeListener{
 
-	private TableViewer viewer;
+	private CheckboxTableViewer viewer;
 
-	public RDFServersViewManager(TableViewer viewer) {
+	public RDFServersViewManager(CheckboxTableViewer viewer) {
 		this.viewer = viewer;
 		RDFServerList servers = RDFServerList.getList();
 		servers.addPropertyChangeListener(this);
@@ -51,6 +52,11 @@ public class RDFServersViewManager implements PropertyChangeListener{
 				oldServer.removePropertyChangeListener(this);
 			}
 			viewer.refresh(true);
+		}else if(prop.equals(RDFServerList.PREFERRED_CHANGED)) {
+			RDFServer oldPreferred = (RDFServer)arg0.getOldValue();
+			RDFServer newPreferred = (RDFServer)arg0.getNewValue();
+			if(oldPreferred != null)viewer.setChecked(oldPreferred, false);
+			if(newPreferred != null)viewer.setChecked(newPreferred, true);
 		}
 		
 	}

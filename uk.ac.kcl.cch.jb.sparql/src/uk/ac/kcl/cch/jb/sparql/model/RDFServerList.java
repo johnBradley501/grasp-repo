@@ -21,6 +21,7 @@ import uk.ac.kcl.cch.jb.sparql.Activator;
 
 public class RDFServerList extends PropertyChangeObject {
 	public static final String LIST_CHANGED = "RDFServerList.ListChanged";
+	public static final String PREFERRED_CHANGED = "RDFServerList.PreferredChanged";
 	private static RDFServerList theList = null;
 	
 	class SortByName implements Comparator<RDFServer> {
@@ -66,11 +67,13 @@ public class RDFServerList extends PropertyChangeObject {
 	
 	public void setPreferred(RDFServer theOne) {
 		if(theOne.isPreferred())return;
+		RDFServer oldPreferred = getPreferred();
 		for(RDFServer serv:servers)serv.setPreferred(false);
 		theOne.setPreferred(true);
+		this.firePropertyChange(PREFERRED_CHANGED, oldPreferred, theOne);
 	}
 	
-	public RDFServer getSelected() {
+	public RDFServer getPreferred() {
 		if(servers == null || servers.size() == 0)return null;
 		for(RDFServer serv:servers) {
 			if(serv.isPreferred())return serv;

@@ -35,7 +35,7 @@ public class RDFServersView extends ViewPart {
 
 	// @Inject IWorkbench workbench;
 	
-	private TableViewer viewer;
+	private CheckboxTableViewer viewer;
 	private Action addNewServerAction;
 	//private Action action2;
 	//private Action doubleClickAction;
@@ -70,12 +70,9 @@ public class RDFServersView extends ViewPart {
 
 	@Override
 	public void createPartControl(Composite parent) {
-		viewer = new TableViewer(parent, SWT.H_SCROLL | SWT.V_SCROLL); // plus SWT.MULTI | 
+		viewer = new CheckboxTableViewer(parent, SWT.H_SCROLL | SWT.V_SCROLL); // plus SWT.MULTI | 
 		
 		servers = RDFServerList.getList();
-		//servers.add(new RDFServer("One"));
-		//servers.add(new RDFServer("Two"));
-		//servers.add(new RDFServer("Three"));
 		
 		viewManager  = new RDFServersViewManager(viewer);
 		
@@ -85,6 +82,30 @@ public class RDFServersView extends ViewPart {
 
 		// Create the help context id for the viewer's control
 		// workbench.getHelpSystem().setHelp(viewer.getControl(), "uk.ac.kcl.cch.jb.sparql.viewer");
+		
+		for(RDFServer server: servers.getServers()) {
+			viewer.setChecked(server, server.isPreferred());
+		}
+		
+		viewer.addCheckStateListener(new ICheckStateListener() {
+
+			@Override
+			public void checkStateChanged(CheckStateChangedEvent event) {
+				RDFServer item = (RDFServer)event.getElement();
+				if(event.getChecked()) {
+					if(item.isPreferred())return;
+					viewer.setAllChecked(false);
+					viewer.setChecked(item, true);
+					servers.setPreferred(item);
+				} else {
+					if(!item.isPreferred())return;
+					item.setPreferred(false);
+				}
+				servers.save();
+			}
+			
+		});
+		
 		getSite().setSelectionProvider(viewer);
 		makeActions();
 		hookContextMenu();
