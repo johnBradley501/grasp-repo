@@ -63,6 +63,20 @@ public class RDFServerList extends PropertyChangeObject {
 		Collections.sort(servers, sortByName);
 		this.firePropertyChange(LIST_CHANGED, null, null);
 	}
+	
+	public void setPreferred(RDFServer theOne) {
+		if(theOne.isPreferred())return;
+		for(RDFServer serv:servers)serv.setPreferred(false);
+		theOne.setPreferred(true);
+	}
+	
+	public RDFServer getSelected() {
+		if(servers == null || servers.size() == 0)return null;
+		for(RDFServer serv:servers) {
+			if(serv.isPreferred())return serv;
+		}
+		return servers.getFirst();
+	}
 
 	public void save() {
 		File cachedata = new File(Activator.getDefault().getStateLocation().toString(), "servers.json");
@@ -87,7 +101,7 @@ public class RDFServerList extends PropertyChangeObject {
 		}
 	}
 	
-	public void load() {
+	private void load() {
 		File cachedata = new File(Activator.getDefault().getStateLocation().toString(), "servers.json");
 		Reader theFile = null;
 		JSONArray jsonData = null;

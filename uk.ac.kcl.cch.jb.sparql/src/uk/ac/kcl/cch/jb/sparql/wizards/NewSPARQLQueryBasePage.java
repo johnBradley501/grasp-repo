@@ -14,14 +14,19 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import uk.ac.kcl.cch.jb.sparql.Activator;
 import uk.ac.kcl.cch.jb.sparql.model.RDFServer;
 import uk.ac.kcl.cch.jb.sparql.model.RDFServerList;
 
 public abstract class NewSPARQLQueryBasePage extends WizardPage {
 
+	public static final String SELECTED_SERVER = "NewQueryFileBasePage.selectedServer";
+
+	
 	private Combo serverWidget;
 	private RDFServer[] servers = null;
 	private RDFServer selectedServer = null;
+	private RDFServer oldSelectedServer = null;
 	private Text titleText;
 	private String title = null;
 
@@ -85,20 +90,39 @@ public abstract class NewSPARQLQueryBasePage extends WizardPage {
 		RDFServerList serverdata = RDFServerList.getList();
 		List<RDFServer> list = serverdata.getServers();
 		servers = new RDFServer[list.size()];
-		Iterator<RDFServer> it = list.iterator();
 		int i = 0;
-		while(it.hasNext()) {
-			RDFServer server = it.next();
+		int selectedServerPos = 0;
+		for(RDFServer server:list) {
 			servers[i] = server;
 			serverWidget.add(server.getName());
+			if(server.isPreferred()) {
+				selectedServerPos = i;
+			}
 			i++;
 		}
-		if(i > 0)selectedServer = servers[0];
-		serverWidget.select(0);
+		//if(i > 0) & (Activator.getDefault().getPluginPreferences().contains(SELECTED_SERVER))) {
+		//	int selectedServerPos = (Activator.getDefault().getPluginPreferences().getInt(SELECTED_SERVER));
+		//	if(selectedServerPos >= 0)selectedServer = servers[selectedServerPos];
+		//	serverWidget.select(selectedServerPos);
+		//}
+		//else {
+		//	serverWidget.select(0);
+		//	selectedServer = servers[0];
+		//}
+		selectedServer = servers[selectedServerPos];
+		oldSelectedServer = selectedServer;
+		serverWidget.select(selectedServerPos);
+		
 		serverWidget.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				int i = serverWidget.getSelectionIndex();
 				if(i >= 0)selectedServer = servers[i];
+				if(oldSelectedServer != selectedServer) {
+					RDFServerList serverdata = RDFServerList.getList();
+					serverdata.setPreferred(selectedServer);
+					serverdata.save();
+				}
+				// Activator.getDefault().getPluginPreferences().setValue(SELECTED_SERVER, i);
 			}
 			
 		});

@@ -14,6 +14,7 @@ public class RDFServer extends PropertyChangeObject {
 	private URL sparqlEngine = null;
 	private URL sparqlBrowser = null;
 	private URL ontologyURL = null;
+	private boolean preferred = false;
 	
 	public RDFServer() {
 		name = "";
@@ -62,12 +63,16 @@ public class RDFServer extends PropertyChangeObject {
 		return ontologyURL;
 	}
 	
+	public boolean isPreferred() {return preferred;}
+	public void setPreferred(boolean val) {preferred = val;}
+	
 	public JSONObject export() throws JSONException {
 		JSONObject obj = new JSONObject();
 		obj.put("name", name);
 		obj.put("endpoint", sparqlEngine.toString());
 		obj.put("browser", sparqlBrowser.toString());
 		obj.put("ontology",  ontologyURL.toString());
+		obj.put("preferred", preferred);
 		return obj;
 	}
 
@@ -78,14 +83,15 @@ public class RDFServer extends PropertyChangeObject {
 			newServer = new RDFServer(name);
 			URL endpoint = new URL(obj.getString("endpoint"));
 			newServer.setSparqlEngine(endpoint);
-			if(!obj.has("browser")) {
-				if(name.toLowerCase().contains("poms")) obj.put("browser", "https://www.poms.ac.uk/rdf/repositories/poms/query?query=");
-				else obj.put("browser", "https://romanrepublic.ac.uk/rdf/repositories/dprr/query?query=");
-			}
+			//if(!obj.has("browser")) {
+			//	if(name.toLowerCase().contains("poms")) obj.put("browser", "https://www.poms.ac.uk/rdf/repositories/poms/query?query=");
+			//	else obj.put("browser", "https://romanrepublic.ac.uk/rdf/repositories/dprr/query?query=");
+			//}
 			URL browser = new URL(obj.getString("browser"));
 			newServer.setSparqlBrowser(browser);
 			URL ontology = new URL(obj.getString("ontology"));
 			newServer.setOntologyURL(ontology);
+			if(obj.has("preferred"))newServer.setPreferred(obj.getBoolean("preferred"));
 		} catch (JSONException e) {
 			return null;
 		} catch (MalformedURLException e) {
