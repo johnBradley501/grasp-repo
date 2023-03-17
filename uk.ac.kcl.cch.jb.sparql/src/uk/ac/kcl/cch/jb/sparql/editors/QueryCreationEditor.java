@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.eclipse.core.resources.IFile;
@@ -14,7 +15,11 @@ import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditDomain;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.ui.actions.ActionRegistry;
@@ -37,11 +42,14 @@ import uk.ac.kcl.cch.jb.sparql.actions.InputCreatingAction;
 import uk.ac.kcl.cch.jb.sparql.commands.CanBeDirty;
 import uk.ac.kcl.cch.jb.sparql.model.SPARQLQuery;
 import uk.ac.kcl.cch.jb.sparql.parts.QueryWhereClausePart;
+import uk.ac.kcl.cch.jb.sparql.parts.WhereClauseComponentPart;
 import uk.ac.kcl.cch.jb.sparql.utils.CompleteGraphChecker;
 
 public class QueryCreationEditor extends MultiPageEditorPart implements IResourceChangeListener, CanBeDirty { // PropertyChangeListener, 
 	
 	public static final String EDITOR_ID = "uk.ac.kcl.cch.jb.sparql.queryeditor";
+	private static double[] bestPositionSin = null;
+	private static double[] bestPositionCos = null;
 	
 	private SPARQLQuery query = null;
 	private IFile workspaceQueryFile = null;
@@ -270,6 +278,79 @@ public class QueryCreationEditor extends MultiPageEditorPart implements IResourc
 	@Override
 	public boolean isSaveAsAllowed() {
 		return true;
+	}
+	
+	public Rectangle findBestPosition(Rectangle centre, Dimension size, int dist) {
+		/*
+		 * This method is used by Commands that add a new component to the Where space, and tries to
+		 * propose a location that reduces overlap on already present components.  At present, it tests out
+		 * 8 places in a circle around the centre, and returns the one with the least overlap.  This is probably
+		 * not an ideal algorithm for this.  It entirely ignores connecting lines, for example.  JB
+		 */
+		List eParts = gefHandler.getGraphicalViewer().getContents().getChildren();
+		if(eParts.get(0) instanceof QueryWhereClausePart)eParts = ((EditPart)eParts.get(0)).getChildren();
+		else eParts = ((EditPart)eParts.get(1)).getChildren();
+		if(eParts.size() <= 1) {
+			return new Rectangle(centre.x, centre.y+dist, size.width, size.height);
+		}
+
+		
+		if(bestPositionSin == null) {
+			double radianInc = Math.toRadians(45.0);
+			bestPositionSin = new double[8];
+			bestPositionCos = new double[8];
+			double curRad = 2.0 * radianInc; // 0.0;
+			for(int i = 0; i < 8; i++) {
+				bestPositionSin[i] = Math.sin(curRad);
+				bestPositionCos[i] = Math.cos(curRad);
+				curRad = curRad + radianInc;
+			}
+		}
+		
+		int halfhorz = centre.width / 2;
+		int halfvert = centre.height / 2;
+		// Point centrePoint = new Point(centre.x+halfhorz, centre.y+halfvert);
+		double actdist = (double)dist+halfhorz;
+		double maskedHorizontal = (double)halfhorz+size.width/2;
+		int newVert = size.height == -1 ? 36: size.height;
+		double maskedVertical = (double)halfvert+newVert/2;
+		double maskedMixed = (double)(maskedHorizontal+maskedVertical)/2.0;
+		double[] maskedLength = new double[] { maskedHorizontal, maskedMixed, maskedVertical, maskedMixed, maskedHorizontal, maskedMixed, maskedVertical, maskedMixed};
+		
+		int smallestArea = 1000000;
+		Rectangle bestMatch = null;
+		for(int i = 0; i < 8; i++) {
+			int proposedCentreX = halfhorz+centre.x + (int)(bestPositionSin[i]*(actdist+maskedLength[i]));
+			int proposedCentreY = halfvert+centre.y - (int)(bestPositionCos[i]*(actdist+maskedLength[i]));
+			Rectangle proposedRect = new Rectangle(
+					proposedCentreX-size.width/2,
+					proposedCentreY-size.height/2,
+					size.width, size.height);
+			if(proposedRect.x < 0)proposedRect.x = 0;
+			if(proposedRect.y < 0)proposedRect.y = 0;
+			Rectangle workingRect = new Rectangle(proposedRect);
+			if(workingRect.height == -1)workingRect.height = 36;
+			
+			// Rectangle biggestOverlap = null;
+			int biggestArea = -1;
+			for(Object itm:eParts) {
+				if(itm instanceof WhereClauseComponentPart) {
+					WhereClauseComponentPart ep = (WhereClauseComponentPart)itm;
+					Rectangle overlap = ep.getWhereClauseComponent().getMyBounds().getIntersection(workingRect);
+					if(overlap.height * overlap.width > biggestArea) {
+						// biggestOverlap = overlap;
+						biggestArea = overlap.height * overlap.width;
+					}
+				}
+			}
+			if(biggestArea == 0)return proposedRect;
+			if(biggestArea < smallestArea) {
+				smallestArea = biggestArea;
+				bestMatch = proposedRect;
+			}
+		}
+		if(bestMatch == null)return new Rectangle(centre.x, centre.y+dist, size.width, size.height);
+		return bestMatch;
 	}
 
 }

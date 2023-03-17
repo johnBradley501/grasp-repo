@@ -3,6 +3,7 @@ package uk.ac.kcl.cch.jb.sparql.commands;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 
 import uk.ac.kcl.cch.jb.sparql.editors.QueryCreationEditor;
@@ -42,10 +43,12 @@ public class AddInstanceConstraintCommand extends DirtyCommand {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		Rectangle newBounds = new Rectangle(domain.getMyBounds());
-		newBounds.y += CONSTRAINT_Y_OFFSET;
-		newBounds.x = newBounds.x+newBounds.width+CONSTRAINT_X_OFFSET;
-		myConstraint.setMyBounds(newBounds);
+		// Rectangle newBounds = new Rectangle(domain.getMyBounds());
+		// newBounds.y += CONSTRAINT_Y_OFFSET;
+		// newBounds.x = newBounds.x+newBounds.width+CONSTRAINT_X_OFFSET;
+		// myConstraint.setMyBounds(newBounds);
+		Dimension size = domain.getMyBounds().getSize();
+		myConstraint.setMyBounds(myEditor.findBestPosition(domain.getMyBounds(), size, CONSTRAINT_X_OFFSET));
 		pred = new WhereClausePredicate(connectingProperty, domain, myConstraint);
 	}
 	

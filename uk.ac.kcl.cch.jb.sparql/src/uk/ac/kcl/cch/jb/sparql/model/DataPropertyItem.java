@@ -11,6 +11,7 @@ import org.semanticweb.owlapi.model.OWLDatatype;
 public class DataPropertyItem extends PropertyItem {
 	
 	public static final String XSD_ANYURI = "http://www.w3.org/2001/XMLSchema#anyURI";
+	public static final String XSD_STRING = "http://www.w3.org/2001/XMLSchema#string";
 	public static final String UNDEFINED_TYPE = "http://sparql.jb.cch.kcl.ac.uk/undefinedType";
 
 	private OWLDataProperty owlData;

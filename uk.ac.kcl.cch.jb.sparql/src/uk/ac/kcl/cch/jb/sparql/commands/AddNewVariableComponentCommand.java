@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLDatatype;
@@ -59,11 +60,14 @@ public class AddNewVariableComponentCommand extends DirtyCommand {
 		this.myVarComponent = new VariableComponent(myWhereClause, myType, this.pred);
 		this.pred.initializeRange(myVarComponent);
 		
-		Rectangle newBounds = new Rectangle(item.getMyBounds());
-		newBounds.height = VariableComponentFigure.DEFAULT_DIMENSION.height;
-		newBounds.y += CONSTRAINT_Y_OFFSET;
-		newBounds.x = newBounds.x+newBounds.width+CONSTRAINT_X_OFFSET;
-		myVarComponent.setMyBounds(newBounds);
+		// Rectangle newBounds = new Rectangle(item.getMyBounds());
+		// newBounds.height = VariableComponentFigure.DEFAULT_DIMENSION.height;
+		// newBounds.y += CONSTRAINT_Y_OFFSET;
+		// newBounds.x = newBounds.x+newBounds.width+CONSTRAINT_X_OFFSET;
+		// myVarComponent.setMyBounds(newBounds);
+		Dimension size = item.getMyBounds().getSize();
+		size.height = VariableComponentFigure.DEFAULT_DIMENSION.height;
+		myVarComponent.setMyBounds(myEditor.findBestPosition(item.getMyBounds(), size, CONSTRAINT_X_OFFSET));
 
 	}
 	

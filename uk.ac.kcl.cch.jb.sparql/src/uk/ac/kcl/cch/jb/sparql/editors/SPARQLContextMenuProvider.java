@@ -21,6 +21,7 @@ import uk.ac.kcl.cch.jb.sparql.actions.AddDataConstraintAction;
 import uk.ac.kcl.cch.jb.sparql.actions.AddInstanceConstraintAction;
 import uk.ac.kcl.cch.jb.sparql.actions.AddNewVariableComponentAction;
 import uk.ac.kcl.cch.jb.sparql.actions.AddPropertyLinkAction;
+import uk.ac.kcl.cch.jb.sparql.actions.AddRdfsLabelReferenceAction;
 import uk.ac.kcl.cch.jb.sparql.actions.ChangeToSubClassAction;
 import uk.ac.kcl.cch.jb.sparql.actions.DeleteWhereClausePredicateAction;
 import uk.ac.kcl.cch.jb.sparql.actions.SwitchOptionalSettingAction;
@@ -143,6 +144,7 @@ public class SPARQLContextMenuProvider extends ContextMenuProvider {
 		for(WhereClausePredicate pred: item.getDomainPredicates()) {
 			propsPresent.add(pred.getProperty());
 		}
+		menu.add(new AddRdfsLabelReferenceAction(myEditor, item));
 		MenuManager constraints = new MenuManager("Constraints for "+item.getDisplayURI()+"("+item.getName()+")");
 		boolean needsSubmenu = true;
 		for(ObjectPropertyItem opi : item.getMyClass().getInclusiveObjectProperties()) { // what ObjectProperties have this item's class as its domain
